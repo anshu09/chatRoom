@@ -1,0 +1,75 @@
+doctype html
+html
+  head
+    title Chat Application
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css', integrity='sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M', crossorigin='anonymous')
+    link(rel='stylesheet', href='stylesheets/style.css')
+  body
+    #nickname-container.container
+      .row
+        .col-md-6.col-md-offset-3.mx-auto
+          .panel.panel-login
+            .panel-heading
+              .row
+                .col-xs-6.mx-auto
+                  a#login-form-link.active(href='#') Login
+                .col-xs-6.mx-auto
+                  a#register-form-link(href='#') Register
+              hr
+            .panel-body
+              .row
+                .col-lg-12.mx-auto
+                  form#login-form(action='http://phpoll.com/login/process', method='post', role='form', style='display: block;')
+                    .form-group
+                      input#username.form-control(type='text', name='username', tabindex='1', placeholder='Username', value='')
+                    .form-group
+                      input#password.form-control(type='password', name='password', tabindex='2', placeholder='Password')
+                    .form-group.text-center
+                      input#remember(type='checkbox', tabindex='3', name='remember')
+                      label(for='remember')  Remember Me
+                    .form-group
+                      .row
+                        .col-sm-6.col-sm-offset-3.mx-auto
+                          input#login-submit.form-control.btn.btn-login(type='submit', name='login-submit', tabindex='4', value='Log In')
+                    .form-group
+                      .row
+                        .col-lg-12.mx-auto
+                          .text-center
+                            a.forgot-password(href='http://phpoll.com/recover', tabindex='5') Forgot Password?
+                  form#register-form(action='http://phpoll.com/register/process', method='post', role='form', style='display: none;')
+                    .form-group
+                      input#username.form-control(type='text', name='username', tabindex='1', placeholder='Username', value='')
+                    .form-group
+                      input#email.form-control(type='email', name='email', tabindex='1', placeholder='Email Address', value='')
+                    .form-group
+                      input#password.form-control(type='password', name='password', tabindex='2', placeholder='Password')
+                    .form-group
+                      input#confirm-password.form-control(type='password', name='confirm-password', tabindex='2', placeholder='Confirm Password')
+                    .form-group
+                      .row
+                        .col-sm-6.col-sm-offset-3.mx-auto
+                          input#register-submit.form-control.btn.btn-register(type='submit', name='register-submit', tabindex='4', value='Register Now')
+    #chat-container.container
+      .row
+        #users.col-md-4.col-sm-4.col-xs-12
+          br
+          h2 Users
+        .clearfix.visible-xs
+        #chat-col.col-md-8.com-sm-8.col-xs-12
+          #room
+            br
+            h2 Chat Room
+          #chat
+          br
+          .row
+            .col-lg-9.col-md-9.col-xs-12
+              input#message.form-control(type='text', placeholder='Type your message here...', autocomplete='off')
+            .col-lg-3.col-md-3.col-xs-12
+              button#chat-message.form-control.btn.btn-info.btn-block Send
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js', integrity='sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4', crossorigin='anonymous')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js', integrity='sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1', crossorigin='anonymous')
+    script(type='text/javascript', src='/socket.io/socket.io.js')
+    script(type='text/javascript', src='javascripts/chat-ui.js')
