@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
 var chatServer = require('./lib/chat-server');
 var index = require('./routes/index');
@@ -16,9 +17,16 @@ var io = require('socket.io').listen(server);
 
 var serv = server.listen(3000);
 
+mongoose.connect('mongodb://localhost/chatAppDb', function(err){
+if(err){
+  console.log(err);
+}else{
+  console.log('Connected to mongodb!');
+}  
+});
+
 //var server = http.createServer(app).listen('3000', '127.0.0.1'); 
 chatServer.listen(serv);
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

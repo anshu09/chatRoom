@@ -2,6 +2,7 @@ $(function(){
 	var socket = io.connect();
 	// id of user that is being private messaged
 	var userToPM = undefined;
+	var xhr = new XMLHttpRequest();
 
 	$('#login-form-link').click(function(e) {
     	$("#login-form").delay(100).fadeIn(100);
@@ -9,7 +10,6 @@ $(function(){
 		$('#register-form-link').removeClass('active');
 		$(this).addClass('active');
 		e.preventDefault();
-		console.log("HERE!!!");
 	});
 	$('#register-form-link').click(function(e) {
 		$("#register-form").delay(100).fadeIn(100);
@@ -17,7 +17,6 @@ $(function(){
 		$('#login-form-link').removeClass('active');
 		$(this).addClass('active');
 		e.preventDefault();
-		console.log("HERE!!!");
 	});
 
 	$("#message").keyup(function(event){
@@ -25,18 +24,54 @@ $(function(){
         $("#chat-message").click();
     }
 	});
+
+	$('#register-submit').click(function(e){
+		e.preventDefault();
+		var nick = $('#usernameRegister').val();
+		var email = $('#emailRegister').val();
+		var password = $('#passwordRegister').val();
+
+		var url = "http://localhost:3000/register";
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-type", "application/json");
+		xhr.onreadystatechange = function () {
+			console.log("RESPONSE ", xhr);
+    		if (xhr.readyState === 4 && xhr.status === 200) {
+    			socket.emit('choose nickname', nick, function(err){
+    				console.log(err);
+    			});
+    			$('#nickname-container').hide();
+				$('#chat-container').show();
+    		} else if (xhr.readyState === 4 && xhr.status === 400) {
+    			alert("This user is already present");
+    		}
+    	};
+    	var data = JSON.stringify({"username": nick, "email": email, "password": password});
+		xhr.send(data);
+	});
+
 	$('#login-submit').click(function(e){
 		e.preventDefault();
 		var nick = $('#username').val();
-		socket.emit('choose nickname', nick, function(err){
-			if (err) {
-				$('#nick-error').text(err);
-				$('#nickname').val('');
-			} else {
-				$('#nickname-container').hide();
+		var password = $('#password').val();
+
+		var url = "http://localhost:3000/login";
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-type", "application/json");
+		xhr.onreadystatechange = function () {
+			console.log("RESPONSE ", xhr);
+    		if (xhr.readyState === 4 && xhr.status === 200) {
+    			socket.emit('choose nickname', nick, function(err){
+    				console.log(err);
+    			});
+    			$('#nickname-container').hide();
 				$('#chat-container').show();
-			}
-		});
+    		} else if (xhr.readyState === 4 && xhr.status === 404){
+    			alert("username of password is incorrect");
+    		}
+    	};
+    	var data = JSON.stringify({"username": nick, "password": password});
+		xhr.send(data);
 	});
 
 	socket.on('names', function(users) {
