@@ -4,19 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-
-var chatServer = require('./lib/chat-server');
-var index = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 var server = require('http').createServer(app);
-//var http = require('http');
 var io = require('socket.io').listen(server);
-
 var serv = server.listen(3000);
 
+var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/chatAppDb', function(err){
 if(err){
   console.log(err);
@@ -25,7 +19,9 @@ if(err){
 }  
 });
 
-//var server = http.createServer(app).listen('3000', '127.0.0.1'); 
+var chatServer = require('./lib/chat-server');
+var index = require('./routes/index');
+var users = require('./routes/users');
 chatServer.listen(serv);
 
 // view engine setup
@@ -33,7 +29,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -40,7 +40,7 @@ $(function(){
     			socket.emit('choose nickname', nick, function(err){
     				console.log(err);
     			});
-    			$('#nickname-container').hide();
+    			$('#login-container').hide();
 				$('#chat-container').show();
     		} else if (xhr.readyState === 4 && xhr.status === 400) {
     			alert("This user is already present");
@@ -64,7 +64,7 @@ $(function(){
     			socket.emit('choose nickname', nick, function(err){
     				console.log(err);
     			});
-    			$('#nickname-container').hide();
+    			$('#login-container').hide();
 				$('#chat-container').show();
     		} else if (xhr.readyState === 4 && xhr.status === 404){
     			alert("username of password is incorrect");
@@ -88,13 +88,6 @@ $(function(){
 			html += '<div class="user" id="user' + users[i].id + '">' + users[i].nick + '</span>';
 		}
 		$('#users').append(html);
-	    // $('.user').click(function(e){
-	    // 	if (!userToPM) {
-	    // 		$('#pm-col').show();
-	    // 	}
-	    // 	userToPM = $(this).attr('id').substring(4);
-	    // 	$('#user-to-pm').html('<h2>' + $(this).text() + '</h2>');
-	    // });
 	}
 
 	socket.on('user disconnect', function(id){
@@ -120,19 +113,19 @@ $(function(){
     });
 
     function displayMsg(msg, nick){
-    	var html = "<span class='msg'><strong>" + nick + ":</strong> " + msg;
+    	var date = new Date();
+    	var hours   = date.getHours();
+  		var minutes = date.getMinutes();
+  		var seconds = date.getSeconds();
+  		var day = date.getDate();
+  		var month = date.getMonth();
+  		var year = date.getFullYear();
+  		var timeString = month+"."+day+"."+year+" " + ((hours > 12) ? hours - 12 : hours);
+  		timeString  += ((minutes < 10) ? ":0" : ":") + minutes;
+  		timeString  += (hours >= 12) ? " P.M." : " A.M.";
+
+    	var html = "<span class='msg'><strong>" + nick + ":</strong> " + msg +"</span><a style='float: right;'>" +timeString+"</a>";
     	$('#chat').append(html);
     }
-
-    $('#send-pm').submit(function(e){
-    	e.preventDefault();
-    	socket.emit('private message', {msg: $('#new-pm').val(), userToPM: userToPM});
-    	$('#new-pm').val('');
-    });
-
-    socket.on('private message', function(data){
-    	var html = "<span class='pMsg'><strong>" + data.from + ":</strong> " + data.msg;
-    	$('#chat').append(html);
-    });
 
 });
